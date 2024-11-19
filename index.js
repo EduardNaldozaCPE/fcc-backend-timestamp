@@ -24,16 +24,20 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api/:date", function (req, res) {
-  let d;
+app.get("/api/", function (req, res) {
+  let d = new Date();
+  let unix = d.valueOf();
+  let utc = d.toUTCString();
 
-  if (req.params.date.includes("-"))
-    // If the date is in yyyy-mm-dd format
-    d = new Date(req.params.date);
-  else
-    // If the date is in unix format
-    d = new Date(parseInt(req.params.date));
+  return res.json({unix, utc});
+});
+
+app.get("/api/:date", function (req, res) {
+  let d = new Date(req.params.date);
   
+  if (d == "Invalid Date")
+    d = new Date(parseInt(req.params.date));
+
   if (d == "Invalid Date")
     return res.json({ "error" : "Invalid Date" })
 
